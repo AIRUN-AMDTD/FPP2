@@ -1,49 +1,60 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Calculadora FPP para Familias</title>
-<meta name="description" content="Calcula tu fecha probable de parto en segundos: por FUR (Naegele) o ajustada por ecografía.">
+<title>¿Cuándo nacerá tu bebé? — Calculadora FPP</title>
+<meta name="description" content="Calcula tu fecha probable de parto (FPP) en segundos: por FUR (Naegele) o ajustada por ecografía.">
 <meta name="theme-color" content="#ffe8da">
-<!-- FAVICON (pestanya) — cor rosa en SVG inline -->
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%23ffe8f0"/><path d="M20 24c4-4 10-4 14 0 4-4 10-4 14 0 4 4 4 10 0 14L34 52 20 38c-4-4-4-10 0-14z" fill="%23f08aa7"/></svg>'>
 <style>
   :root{
-    /* paleta amable (no gris) */
-    --bg:#FFF7F1;         /* beix suau de fons */
-    --text:#2b2b2b; 
-    --muted:#6f6f6f;
-    --line:#efdfd6;
-    --pri:#30bf78; --pri-700:#289a62;
-    --card:#ffffff;
-    --pA:#ffe6ef;  /* target rosa suau */
-    --pB:#e8f1ff;  /* blauet suau     */
-    --pRes:#fff3dd;/* groc suau resultats */
+    --bg:#FFF7F1; --text:#2b2b2b; --muted:#6f6f6f; --line:#efdfd6;
+    --pri:#30bf78; --pri-700:#289a62; --card:#ffffff;
+    --pA:#ffe6ef; --pB:#e8f1ff; --pRes:#fff3dd;
+    --highlight:#ffe6ef;
   }
   *{box-sizing:border-box}
-  /* CENTRAT vertical/horitzontal */
   body{
     margin:0; min-height:100svh; display:flex;
     background:var(--bg); color:var(--text);
     font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   }
-  .wrap{ width:100%; max-width:980px; margin:auto; padding:22px; }
+  .wrap{width:100%; max-width:980px; margin:auto; padding:22px;}
 
-  /* Header amb dibuix */
-  header{ display:grid; grid-template-columns:1fr auto; gap:18px; align-items:center; margin-bottom:14px; }
-  .titlebox{ min-width:0 }
+  /* Header */
+  header{display:grid; grid-template-columns:1fr auto; gap:18px; align-items:center; margin-bottom:14px;}
+  .titlebox{min-width:0}
   .badge{display:inline-block;background:#dff7ea;border:1px solid #b9ebd0;color:#137a47;
          padding:6px 10px;border-radius:999px;font-size:.82rem}
-  h1{margin:.5rem 0 .2rem;font-size:1.7rem}
-  p.lead{margin:.2rem 0 1rem;color:var(--muted)}
+  .bigtitle{
+    margin:.35rem 0 .4rem;
+    font-weight:900; line-height:1.05;
+    font-size:2.3rem;
+    position:relative;
+    display:inline-block;
+    color:#1f2b3a;
+    text-shadow:1px 2px 4px rgba(0,0,0,.15);
+  }
+  .bigtitle::after{
+    content:"";
+    position:absolute;
+    left:0; bottom:3px;
+    width:100%; height:0.6em;
+    background:var(--highlight);
+    z-index:-1;
+    border-radius:6px;
+  }
+  @media(min-width:700px){ .bigtitle{font-size:3rem;} }
+  .lead{margin:.2rem 0 .9rem; color:var(--muted); font-size:1.02rem}
+
   .hero{
     width:120px;height:120px;border-radius:18px;background:var(--card);border:1px solid var(--line);
     display:grid;place-items:center;box-shadow:0 10px 28px rgba(0,0,0,.06)
   }
   .hero svg{width:86px;height:86px}
 
-  /* Cards i grid */
+  /* Cards */
   .grid{display:grid;gap:16px}
   @media(min-width:900px){ .grid-2{grid-template-columns:1fr 1fr} }
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.05)}
@@ -77,10 +88,9 @@
     <header>
       <div class="titlebox">
         <span class="badge">Rápido y gratuito</span>
-        <h1>Calculadora FPP para Familias</h1>
-        <p class="lead">Tu fecha probable de parto en <b>segundos</b>. Por <b>FUR</b> (Naegele) o por <b>ecografía</b>. Compártela y guárdala.</p>
+        <h1 class="bigtitle">¿Cuándo nacerá tu bebé?</h1>
+        <p class="lead">Calcula tu <b>Fecha Probable de Parto</b> en segundos. Por <b>FUR</b> (Naegele) o por <b>ecografía</b>.</p>
       </div>
-      <!-- Dibuix mare-bebè (SVG inline) -->
       <div class="hero" aria-hidden="true">
         <svg viewBox="0 0 64 64" fill="none" stroke="#f08aa7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M36 12c6 0 10 4 10 10 0 6-4 10-10 10" />
@@ -93,8 +103,8 @@
       </div>
     </header>
 
+    <!-- OPCIONES -->
     <div class="grid grid-2">
-      <!-- OPCIÓN A -->
       <section class="card cardA">
         <div class="in">
           <div class="title">Opción A — FUR (Última regla)</div>
@@ -114,13 +124,11 @@
         </div>
       </section>
 
-      <!-- OPCIÓN B -->
       <section class="card cardB">
         <div class="in">
           <div class="title">Opción B — Ecografía</div>
           <label for="ecoDate">Fecha de la eco (AAAA-MM-DD)</label>
           <input type="date" id="ecoDate">
-
           <div class="row" style="gap:12px">
             <div style="flex:1 1 120px">
               <label for="gaW">Semanas</label>
@@ -131,7 +139,6 @@
               <input type="number" id="gaD" min="0" max="6" placeholder="0–6">
             </div>
           </div>
-
           <div class="row">
             <button class="btn" onclick="calcECO()">Calcular FPP</button>
             <button class="btn-ghost" onclick="clearECO()">Limpiar</button>
@@ -145,22 +152,17 @@
       <div class="in">
         <div class="title">Resultados y seguimiento</div>
         <div id="out" class="muted">Introduce los datos y pulsa “Calcular FPP”.</div>
-
         <div class="kpis" id="kpis" style="display:none">
           <div class="k"><b>DPP</b><div id="kpp"></div></div>
           <div class="k"><b>Ventana 38–42s</b><div id="kven"></div></div>
           <div class="k"><b>Gestación hoy</b><div id="ksem"></div></div>
           <div class="k"><b>Hitos</b><div id="khitos"></div></div>
         </div>
-
         <div class="row" style="margin-top:12px">
           <button class="btn-ghost" onclick="copyRes()">Copiar resultado</button>
           <button class="btn-ghost" onclick="shareRes()">Compartir</button>
         </div>
-
-        <p class="muted" style="margin-top:10px">
-          La FPP es una <b>estimación</b>. Cada embarazo es único. Ante dudas, consulta a tu profesional de salud.
-        </p>
+        <p class="muted" style="margin-top:10px">La FPP es una <b>estimación</b>. Cada embarazo es único. Ante dudas, consulta a tu profesional de salud.</p>
       </div>
     </section>
 
@@ -170,73 +172,45 @@
   </div>
 
 <script>
-  // Utils
   const fmt = d => d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'});
   const addDays = (d,n)=>{const x=new Date(d); x.setDate(x.getDate()+n); return x;}
   const diffDays = (a,b)=> Math.round((a-b)/(1000*60*60*24));
-
   function paint(dpp, base){
-    const hoy = new Date();
-    const diasTot = 280;
-    const trans = diasTot - diffDays(dpp,hoy);
-    const s = Math.max(0,Math.floor(trans/7));
-    const d = Math.max(0,trans - s*7);
-
-    const ven38 = addDays(base, 38*7);
-    const ven42 = addDays(base, 42*7);
-    const t2 = addDays(base, 13*7 - 1);  // ~fin S13
-    const t3 = addDays(base, 28*7);      // ~inicio S28
-
-    document.getElementById('kpp').textContent = fmt(dpp);
-    document.getElementById('kven').textContent = `${fmt(ven38)} → ${fmt(ven42)}`;
-    document.getElementById('ksem').textContent = `${s} semanas ${d} días`;
-    document.getElementById('khitos').textContent = `Trim2: ${fmt(t2)} · Trim3: ${fmt(t3)}`;
-
-    document.getElementById('kpis').style.display='';
-    document.getElementById('out').textContent = 'Resultado listo ✅';
-    window.__res = { dpp: fmt(dpp), v38: fmt(ven38), v42: fmt(ven42), semanas: s, d: d };
+    const hoy=new Date(), diasTot=280, trans=diasTot-diffDays(dpp,hoy);
+    const s=Math.max(0,Math.floor(trans/7)), d=Math.max(0,trans-s*7);
+    const ven38=addDays(base,38*7), ven42=addDays(base,42*7);
+    const t2=addDays(base,13*7-1), t3=addDays(base,28*7);
+    kpp.textContent=fmt(dpp);
+    kven.textContent=`${fmt(ven38)} → ${fmt(ven42)}`;
+    ksem.textContent=`${s} semanas ${d} días`;
+    khitos.textContent=`Trim2: ${fmt(t2)} · Trim3: ${fmt(t3)}`;
+    kpis.style.display=''; out.textContent='Resultado listo ✅';
+    window.__res={dpp:fmt(dpp),v38:fmt(ven38),v42:fmt(ven42),semanas:s,d:d};
   }
-
-  // FUR amb ajust per cicle
   function calcFUR(){
-    const v = document.getElementById('fur').value;
-    const ciclo = parseInt(document.getElementById('ciclo').value || '28',10);
-    if(!v || isNaN(ciclo)){ alert('Completa FUR y duración de ciclo'); return; }
-    const fur = new Date(v);
-    const dpp = addDays(fur, 280 + (ciclo-28)); // ajust aproximat
-    paint(dpp, addDays(dpp,-280));
+    const v=fur.value, ciclo=parseInt(ciclo.value||'28',10);
+    if(!v||isNaN(ciclo)){ alert('Completa FUR y duración de ciclo'); return; }
+    const furDate=new Date(v);
+    const dpp=addDays(furDate,280+(ciclo-28));
+    paint(dpp,addDays(dpp,-280));
   }
-  function clearFUR(){ document.getElementById('fur').value=''; document.getElementById('ciclo').value=28; resetOut(); }
-
-  // ECO: DPP = eco + 280 - GA(días)
+  function clearFUR(){ fur.value=''; ciclo.value=28; resetOut(); }
   function calcECO(){
-    const ecoV = document.getElementById('ecoDate').value;
-    const w = parseInt(document.getElementById('gaW').value||'0',10);
-    const d = parseInt(document.getElementById('gaD').value||'0',10);
-    if(!ecoV || isNaN(w) || isNaN(d)){ alert('Completa fecha de ecografía y GA (semanas/días)'); return; }
-    const eco = new Date(ecoV);
-    const gaDias = w*7 + d;
-    const dpp = addDays(eco, 280 - gaDias);
-    paint(dpp, addDays(dpp,-280));
+    const ecoV=ecoDate.value,w=parseInt(gaW.value||'0',10),d=parseInt(gaD.value||'0',10);
+    if(!ecoV||isNaN(w)||isNaN(d)){ alert('Completa fecha de ecografía y GA (semanas/días)'); return; }
+    const eco=new Date(ecoV), gaDias=w*7+d, dpp=addDays(eco,280-gaDias);
+    paint(dpp,addDays(dpp,-280));
   }
-  function clearECO(){ document.getElementById('ecoDate').value=''; document.getElementById('gaW').value=''; document.getElementById('gaD').value=''; resetOut(); }
-
-  function resetOut(){
-    document.getElementById('kpis').style.display='none';
-    document.getElementById('out').textContent='Introduce los datos y pulsa “Calcular FPP”.';
-    window.__res=null;
-  }
-
+  function clearECO(){ ecoDate.value=''; gaW.value=''; gaD.value=''; resetOut(); }
+  function resetOut(){ kpis.style.display='none'; out.textContent='Introduce los datos y pulsa “Calcular FPP”.'; window.__res=null; }
   function copyRes(){
     if(!window.__res){ alert('Calcula primero 🙂'); return; }
-    const r = window.__res;
-    const txt = `DPP: ${r.dpp} · Ventana 38–42s: ${r.v38} – ${r.v42} · Gestación: ${r.semanas}s ${r.d}d`;
+    const r=window.__res, txt=`DPP: ${r.dpp} · Ventana 38–42s: ${r.v38} – ${r.v42} · Gestación: ${r.semanas}s ${r.d}d`;
     navigator.clipboard.writeText(txt).then(()=>alert('Resultado copiado ✅'));
   }
   function shareRes(){
     if(!window.__res){ alert('Calcula primero 🙂'); return; }
-    const r = window.__res;
-    const txt = `Mi DPP es ${r.dpp} (ventana ${r.v38}–${r.v42}). Calculado con la Calculadora FPP para Familias.`;
+    const r=window.__res, txt=`Mi DPP es ${r.dpp} (ventana ${r.v38}–${r.v42}). Calculado con la Calculadora FPP.`;
     if(navigator.share){ navigator.share({title:'Mi DPP', text:txt, url:location.href}); }
     else{ alert('Compartir no disponible en este dispositivo. Copia el resultado.'); }
   }
