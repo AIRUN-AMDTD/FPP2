@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora FPP para Familias</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background: #fafafa; }
+    h1 { color: #444; }
+    label { display:block; margin-top:10px; }
+    input { padding:6px; margin-top:5px; }
+    button { margin-top:15px; padding:10px; border:none; cursor:pointer; background:#4CAF50; color:#fff; }
+    #resultado { margin-top:20px; font-weight:bold; }
+  </style>
+</head>
+<body>
+  <h1>Calculadora de Fecha Probable de Parto</h1>
+  <p>Introduce la Fecha de tu Última Regla (FUR):</p>
+
+  <label for="fur">FUR:</label>
+  <input type="date" id="fur" />
+
+  <button onclick="calcularFPP()">Calcular FPP</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    function calcularFPP() {
+      const v = document.getElementById("fur").value;
+      if (!v) { alert("Por favor introduce una fecha"); return; }
+      const d = new Date(v);
+      d.setDate(d.getDate() + 280); // 40 semanas
+      document.getElementById("resultado").innerText =
+        "Tu fecha probable de parto es: " + d.toLocaleDateString();
+    }
+  </script>
+</body>
+</html>
