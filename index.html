@@ -1,75 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>¿Cuándo nacerá tu bebé? — Calculadora FPP</title>
+<meta name="description" content="Calcula tu fecha probable de parto (FPP) en segundos: por FUR (Naegele) o ajustada por ecografía.">
+<meta name="theme-color" content="#ffe8da">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%23ffe8f0"/><path d="M20 24c4-4 10-4 14 0 4-4 10-4 14 0 4 4 4 10 0 14L34 52 20 38c-4-4-4-10 0-14z" fill="%23f08aa7"/></svg>'>
+<style>
+  :root{
+    --bg:#FFF7F1; --text:#2b2b2b; --muted:#6f6f6f; --line:#efdfd6;
+    --pri:#30bf78; --pri-700:#289a62; --card:#ffffff;
+    --pA:#ffe6ef; --pB:#e8f1ff; --pRes:#fff3dd;
+    --highlight:#ffe6ef;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100svh; display:flex;
+    background:var(--bg); color:var(--text);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  }
+  .wrap{width:100%; max-width:980px; margin:auto; padding:22px;}
+  header{display:grid; grid-template-columns:1fr auto; gap:18px; align-items:center; margin-bottom:14px;}
+  .titlebox{min-width:0}
+  .badge{display:inline-block;background:#dff7ea;border:1px solid #b9ebd0;color:#137a47;
+         padding:6px 10px;border-radius:999px;font-size:.82rem}
+  .bigtitle{
+    margin:.35rem 0 .4rem; font-weight:900; line-height:1.05; font-size:2.3rem;
+    position:relative; display:inline-block; color:#1f2b3a;
+    text-shadow:1px 2px 4px rgba(0,0,0,.15);
+  }
+  .bigtitle::after{
+    content:""; position:absolute; left:0; bottom:3px; width:100%; height:0.6em;
+    background:var(--highlight); z-index:-1; border-radius:6px;
+  }
+  @media(min-width:700px){ .bigtitle{font-size:3rem;} }
+  .lead{margin:.2rem 0 .9rem; color:var(--muted); font-size:1.02rem}
+  .hero{
+    width:120px;height:120px;border-radius:18px;background:var(--card);border:1px solid var(--line);
+    display:grid;place-items:center;box-shadow:0 10px 28px rgba(0,0,0,.06)
+  }
+  .hero svg{width:86px;height:86px}
+  .grid{display:grid;gap:16px}
+  @media(min-width:900px){ .grid-2{grid-template-columns:1fr 1fr} }
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.05)}
+  .in{padding:16px}
+  .title{font-weight:700;margin-bottom:8px}
+  .hint{font-size:.9rem;color:var(--muted);margin-top:4px}
+  .cardA{background:var(--pA)} .cardB{background:var(--pB)} .cardRes{background:var(--pRes)}
+  label{font-size:.9rem;color:#4b4b4b}
+  input[type="date"], input[type="number"]{
+    width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;
+    font-size:1rem;margin-top:6px
+  }
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  button{border:0;border-radius:12px;padding:12px 14px;cursor:pointer;font-weight:700}
+  .btn{background:var(--pri);color:#fff} .btn:hover{background:var(--pri-700)}
+  .btn-ghost{background:#f3f3f3}
+  .kpis{display:grid;gap:10px;margin-top:10px}
+  @media(min-width:600px){ .kpis{grid-template-columns:repeat(4,1fr)} }
+  .k{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .muted{color:var(--muted);font-size:.9rem}
+  footer{margin:18px 0;text-align:center}
+  a{color:#246ea8;text-decoration:none}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="titlebox">
+        <span class="badge">Rápido y gratuito</span>
+        <h1 class="bigtitle">¿Cuándo nacerá tu bebé?</h1>
+        <p class="lead">Calcula tu <b>Fecha Probable de Parto</b> en segundos. Por <b>FUR</b> (Naegele) o por <b>ecografía</b>.</p>
+      </div>
+      <div class="hero" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" stroke="#f08aa7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M36 12c6 0 10 4 10 10 0 6-4 10-10 10" />
+          <path d="M46 22c4 0 8 4 8 9 0 7-6 13-14 13H26" />
+          <path d="M26 54c-6 0-10-5-10-11 0-5 3-9 7-10" />
+          <path d="M27 38c5-5 13-3 13 4 0 5-5 8-10 6" />
+          <circle cx="39" cy="42" r="1.6" fill="#f08aa7" stroke="none"/>
+          <path d="M18 26c1.5-1 3 0 3 1.5 0-1.5 1.5-2.5 3-1.5 2 1.3-.2 3.8-3 5.6-2.8-1.8-5-4.3-3-5.6z" fill="#ffb3c6" stroke="none"/>
+        </svg>
+      </div>
+    </header>
+
+    <div class="grid grid-2">
+      <!-- OPCIÓN A -->
+      <section class="card cardA">
+        <div class="in">
+          <div class="title">Opción A — FUR (Última regla)</div>
+          <label for="fur">FUR (AAAA-MM-DD)</label>
+          <input type="date" id="fur">
+          <div class="row">
+            <div style="flex:1 1 180px">
+              <label for="ciclo">Duración del ciclo (días)</label>
+              <input type="number" id="ciclo" min="20" max="45" value="28">
+              <div class="hint">Se ajusta automáticamente si tu ciclo no es de 28 días.</div>
+            </div>
+          </div>
+          <div class="row">
+            <button class="btn" id="btnCalcFUR">Calcular FPP</button>
+            <button class="btn-ghost" id="btnClearFUR">Limpiar</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- OPCIÓN B -->
+      <section class="card cardB">
+        <div class="in">
+          <div class="title">Opción B — Ecografía</div>
+          <label for="ecoDate">Fecha de la eco (AAAA-MM-DD)</label>
+          <input type="date" id="ecoDate">
+          <div class="row" style="gap:12px">
+            <div style="flex:1 1 120px">
+              <label for="gaW">Semanas</label>
+              <input type="number" id="gaW" min="0" max="45" placeholder="p.ej. 12">
+            </div>
+            <div style="flex:1 1 120px">
+              <label for="gaD">Días</label>
+              <input type="number" id="gaD" min="0" max="6" placeholder="0–6">
+            </div>
+          </div>
+          <div class="row">
+            <button class="btn" id="btnCalcECO">Calcular FPP</button>
+            <button class="btn-ghost" id="btnClearECO">Limpiar</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- RESULTADOS -->
+    <section class="card cardRes" style="margin-top:16px">
+      <div class="in">
+        <div class="title">Resultados y seguimiento</div>
+        <div id="out" class="muted">Introduce los datos y pulsa “Calcular FPP”.</div>
+        <div class="kpis" id="kpis" style="display:none">
+          <div class="k"><b>DPP</b><div id="kpp"></div></div>
+          <div class="k"><b>Ventana 38–42s</b><div id="kven"></div></div>
+          <div class="k"><b>Gestación hoy</b><div id="ksem"></div></div>
+          <div class="k"><b>Hitos</b><div id="khitos"></div></div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn-ghost" id="btnCopy">Copiar resultado</button>
+          <button class="btn-ghost" id="btnShare">Compartir</button>
+        </div>
+        <p class="muted" style="margin-top:10px">La FPP es una <b>estimación</b>. Cada embarazo es único. Ante dudas, consulta a tu profesional de salud.</p>
+      </div>
+    </section>
+
+    <footer>
+      <p class="muted">Hecho con cariño · <a href="privacidad.html">Privacidad</a></p>
+    </footer>
+  </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // Helpers d'element
-  const $ = (id) => document.getElementById(id);
+  const $ = id => document.getElementById(id);
 
-  // Refs DOM
-  const el = {
-    fur: $('fur'),
-    ciclo: $('ciclo'),
-    ecoDate: $('ecoDate'),
-    gaW: $('gaW'),
-    gaD: $('gaD'),
-    kpp: $('kpp'),
-    kven: $('kven'),
-    ksem: $('ksem'),
-    khitos: $('khitos'),
-    kpis: $('kpis'),
-    out: $('out')
-  };
+  // refs
+  const fur = $('fur'), ciclo = $('ciclo'),
+        ecoDate = $('ecoDate'), gaW = $('gaW'), gaD = $('gaD');
 
-  // Utils de dates
-  const fmt = (d) => d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'2-digit' });
-  const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
-  const diffDays = (a, b) => Math.round((a - b) / (1000*60*60*24));
+  const kpp = $('kpp'), kven = $('kven'), ksem = $('ksem'), khitos = $('khitos'),
+        kpis = $('kpis'), out = $('out');
+
+  // utils dates
+  const fmt = d => d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'});
+  const addDays = (d,n)=>{const x=new Date(d); x.setDate(x.getDate()+n); return x;}
+  const diffDays = (a,b)=> Math.round((a-b)/(1000*60*60*24));
 
   function resetOut(){
-    el.kpis.style.display = 'none';
-    el.out.textContent = 'Introduce los datos y pulsa “Calcular FPP”.';
-    window.__res = null;
+    kpis.style.display='none';
+    out.textContent='Introduce los datos y pulsa “Calcular FPP”.';
+    window.__res=null;
   }
 
   function paint(dpp, base){
-    const hoy = new Date();
-    const diasTot = 280;
-    const trans = diasTot - diffDays(dpp, hoy);
-    const s = Math.max(0, Math.floor(trans/7));
-    const d = Math.max(0, trans - s*7);
+    const hoy=new Date(), diasTot=280, trans=diasTot-diffDays(dpp,hoy);
+    const s=Math.max(0,Math.floor(trans/7)), d=Math.max(0,trans - s*7);
 
     const ven38 = addDays(base, 38*7);
     const ven42 = addDays(base, 42*7);
-    const t2 = addDays(base, 13*7 - 1); // ~fi S13
-    const t3 = addDays(base, 28*7);     // ~inici S28
+    const t2    = addDays(base, 13*7 - 1);  // ~fin S13
+    const t3    = addDays(base, 28*7);      // ~inicio S28
 
-    el.kpp.textContent   = fmt(dpp);
-    el.kven.textContent  = `${fmt(ven38)} → ${fmt(ven42)}`;
-    el.ksem.textContent  = `${s} semanas ${d} días`;
-    el.khitos.textContent= `Trim2: ${fmt(t2)} · Trim3: ${fmt(t3)}`;
+    kpp.textContent  = fmt(dpp);
+    kven.textContent = `${fmt(ven38)} → ${fmt(ven42)}`;
+    ksem.textContent = `${s} semanas ${d} días`;
+    khitos.textContent= `Trim2: ${fmt(t2)} · Trim3: ${fmt(t3)}`;
 
-    el.kpis.style.display = '';
-    el.out.textContent = 'Resultado listo ✅';
-    window.__res = { dpp: fmt(dpp), v38: fmt(ven38), v42: fmt(ven42), semanas: s, d: d };
+    kpis.style.display='';
+    out.textContent='Resultado listo ✅';
+    window.__res = { dpp:fmt(dpp), v38:fmt(ven38), v42:fmt(ven42), semanas:s, d:d };
   }
 
   function calcFUR(){
-    const v = el.fur.value;
-    const ciclo = parseInt(el.ciclo.value || '28', 10);
-    if (!v || isNaN(ciclo)){ alert('Completa FUR y duración de ciclo'); return; }
+    const v = fur.value;
+    const c = parseInt(ciclo.value || '28', 10);
+    if(!v || isNaN(c)){ alert('Completa FUR y duración de ciclo'); return; }
     const furDate = new Date(v);
-    const dpp = addDays(furDate, 280 + (ciclo - 28)); // ajust aproximat per cicle
+    const dpp = addDays(furDate, 280 + (c - 28));
     paint(dpp, addDays(dpp, -280));
   }
 
   function clearFUR(){
-    el.fur.value = '';
-    el.ciclo.value = 28;
-    resetOut();
+    fur.value=''; ciclo.value=28; resetOut();
   }
 
   function calcECO(){
-    const ecoV = el.ecoDate.value;
-    const w = parseInt(el.gaW.value || '0', 10);
-    const d = parseInt(el.gaD.value || '0', 10);
+    const ecoV = ecoDate.value;
+    const w = parseInt(gaW.value || '0', 10);
+    const d = parseInt(gaD.value || '0', 10);
     if(!ecoV || isNaN(w) || isNaN(d)){ alert('Completa fecha de ecografía y GA (semanas/días)'); return; }
     const eco = new Date(ecoV);
     const gaDias = w*7 + d;
@@ -78,36 +220,34 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function clearECO(){
-    el.ecoDate.value = '';
-    el.gaW.value = '';
-    el.gaD.value = '';
-    resetOut();
+    ecoDate.value=''; gaW.value=''; gaD.value=''; resetOut();
   }
 
   function copyRes(){
     if(!window.__res){ alert('Calcula primero 🙂'); return; }
     const r = window.__res;
     const txt = `DPP: ${r.dpp} · Ventana 38–42s: ${r.v38} – ${r.v42} · Gestación: ${r.semanas}s ${r.d}d`;
-    navigator.clipboard.writeText(txt).then(() => alert('Resultado copiado ✅'));
+    navigator.clipboard.writeText(txt).then(()=>alert('Resultado copiado ✅'));
   }
 
   function shareRes(){
     if(!window.__res){ alert('Calcula primero 🙂'); return; }
     const r = window.__res;
     const txt = `Mi DPP es ${r.dpp} (ventana ${r.v38}–${r.v42}). Calculado con la Calculadora FPP.`;
-    if(navigator.share){ navigator.share({ title:'Mi DPP', text: txt, url: location.href }); }
+    if(navigator.share){ navigator.share({title:'Mi DPP', text:txt, url:location.href}); }
     else{ alert('Compartir no disponible en este dispositivo. Copia el resultado.'); }
   }
 
-  // Exposa les funcions perquè els botons onclick puguin cridar-les
-  window.calcFUR = calcFUR;
-  window.clearFUR = clearFUR;
-  window.calcECO = calcECO;
-  window.clearECO = clearECO;
-  window.copyRes = copyRes;
-  window.shareRes = shareRes;
+  // bind botons de manera robusta
+  $('btnCalcFUR').addEventListener('click', calcFUR);
+  $('btnClearFUR').addEventListener('click', clearFUR);
+  $('btnCalcECO').addEventListener('click', calcECO);
+  $('btnClearECO').addEventListener('click', clearECO);
+  $('btnCopy').addEventListener('click', copyRes);
+  $('btnShare').addEventListener('click', shareRes);
 
-  // Reset inicial
   resetOut();
 });
 </script>
+</body>
+</html>
